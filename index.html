@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PRISM-AI — Working Prototype</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:#f5f7fb;color:#172033}
+button,input,select{font:inherit}.app{display:flex;min-height:100vh}.side{width:235px;background:#fff;border-right:1px solid #e5e9f0;padding:20px 14px;position:fixed;inset:0 auto 0 0}.brand{display:flex;align-items:center;gap:10px;padding:4px 10px 26px}.logo{width:38px;height:38px;border-radius:11px;background:#eaf2ff;color:#175cd3;display:grid;place-items:center;font-weight:800}.brand b{font-size:17px}.brand small{display:block;color:#667085;font-size:10px;margin-top:2px}.nav{display:grid;gap:5px}.nav button{border:0;background:none;text-align:left;padding:12px;border-radius:10px;color:#667085;font-weight:650;cursor:pointer}.nav button.active,.nav button:hover{background:#edf4ff;color:#175cd3}.nav span{display:inline-block;width:27px}.sidefoot{position:absolute;bottom:18px;color:#667085;font-size:11px;padding:0 10px;line-height:1.6}
+.main{margin-left:235px;width:calc(100% - 235px)}header{height:68px;background:#fff;border-bottom:1px solid #e5e9f0;display:flex;align-items:center;justify-content:space-between;padding:0 28px}.search{width:290px;background:#f7f8fa;border:1px solid #e5e9f0;border-radius:10px;padding:9px 12px}.search input{border:0;outline:0;background:none;width:90%;font-size:13px}.user{display:flex;gap:10px;align-items:center;color:#667085;font-size:12px}.avatar{width:34px;height:34px;border-radius:50%;background:#dbeafe;color:#175cd3;display:grid;place-items:center;font-weight:700}
+main>section{padding:28px;max-width:1450px;margin:auto}.view{display:none}.view.active{display:block}.head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}.head h1{margin:0;font-size:27px}.head p{margin:6px 0;color:#667085;font-size:13px}.btn{border:1px solid #e5e9f0;background:#fff;color:#344054;border-radius:9px;padding:10px 14px;cursor:pointer;font-weight:650}.btn.primary{background:#175cd3;color:#fff;border-color:#175cd3}.grid{display:grid;gap:17px}.stats{grid-template-columns:repeat(4,1fr)}.card{background:#fff;border:1px solid #e5e9f0;border-radius:15px;padding:18px;box-shadow:0 7px 24px rgba(16,24,40,.045)}.stat{min-height:120px}.label{font-size:12px;color:#667085;font-weight:650}.value{font-size:28px;font-weight:800;margin-top:12px}.trend{font-size:11px;margin-top:6px}.up{color:#079455}.down{color:#d92d20}.two{grid-template-columns:1.45fr .9fr;margin-top:17px}.card h3{margin:0;font-size:15px}.sub{font-size:11px;color:#667085;margin-top:4px}.chart{height:225px;margin-top:17px;display:flex;align-items:flex-end;gap:8px;border-bottom:1px solid #e5e9f0;padding:8px}.bars{height:100%;flex:1;display:flex;align-items:flex-end;gap:4px}.bar{flex:1;background:#a9c4f7;border-radius:5px 5px 0 0}.bar.a{background:#175cd3}.months{display:flex;gap:8px;color:#667085;font-size:10px;margin:7px 8px 0}.months span{flex:1;text-align:center}.legend{font-size:11px;color:#667085;margin-top:9px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#175cd3;margin-right:5px}.dot.p{background:#a9c4f7;margin-left:15px}.risks{display:grid;gap:10px;margin-top:15px}.risk{border:1px solid #e5e9f0;border-radius:11px;padding:12px}.riskrow{display:flex;justify-content:space-between;gap:8px}.risk b{font-size:12px}.pill{font-size:9px;font-weight:800;border-radius:999px;padding:4px 8px}.high{background:#fff0ef;color:#d92d20}.medium{background:#fff5e6;color:#dc6803}.low{background:#eafaf3;color:#079455}.meta{display:flex;justify-content:space-between;color:#667085;font-size:10px;margin-top:7px}.table{overflow:auto;margin-top:15px}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:12px;border-bottom:1px solid #e5e9f0;text-align:left;white-space:nowrap}th{font-size:10px;text-transform:uppercase;color:#667085}.progress{display:inline-block;width:110px;height:7px;background:#edf0f4;border-radius:8px;overflow:hidden;vertical-align:middle}.progress i{display:block;height:100%;background:#175cd3}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-top:18px}.field label{display:block;font-size:11px;font-weight:700;color:#475467;margin-bottom:6px}.field input,.field select{width:100%;padding:11px;border:1px solid #d8dee8;border-radius:9px;outline:none;background:#fff}.field input:focus,.field select:focus{border-color:#175cd3;box-shadow:0 0 0 3px #edf4ff}.result{margin-top:18px;padding:18px;border-radius:12px;background:#f8fafc;border:1px solid #e5e9f0}.score{font-size:42px;font-weight:850}.explain{display:grid;gap:8px;margin-top:13px}.explain div{display:flex;justify-content:space-between;font-size:11px}.alert{margin-top:14px;padding:13px;border:1px solid #f1ddb5;background:#fff9ed;border-radius:10px;font-size:11px}.alert b{font-size:12px}.alert p{margin:4px 0;color:#795b22}.toast{position:fixed;right:22px;bottom:22px;background:#172033;color:white;padding:11px 15px;border-radius:9px;font-size:12px;display:none;z-index:9}
+@media(max-width:850px){.side{width:65px}.brand div:last-child,.nav button span:last-child,.sidefoot{display:none}.nav button{text-align:center}.nav span{width:auto}.main{margin-left:65px;width:calc(100% - 65px)}.stats{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.search{width:210px}}@media(max-width:560px){main>section{padding:18px}.stats{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.head{display:block}.head .btn{margin-top:10px}.search{display:none}}
+
+.login-screen{position:fixed;inset:0;background:#f5f7fb;display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
+.login-box{width:min(430px,100%);background:#fff;border:1px solid #e5e9f0;border-radius:18px;padding:34px;box-shadow:0 18px 55px rgba(16,24,40,.10)}
+.login-brand{display:flex;align-items:center;gap:11px;margin-bottom:28px}
+.login-logo{width:44px;height:44px;border-radius:12px;background:#eaf2ff;color:#175cd3;display:grid;place-items:center;font-weight:850;font-size:19px}
+.login-title{font-size:25px;font-weight:850;margin:0}.login-sub{font-size:12px;color:#667085;margin:6px 0 25px}
+.login-field{margin-bottom:15px}.login-field label{display:block;font-size:11px;font-weight:700;color:#344054;margin-bottom:6px}
+.login-field input{width:100%;padding:12px;border:1px solid #d8dee8;border-radius:9px;outline:none;background:#fff}
+.login-field input:focus{border-color:#175cd3;box-shadow:0 0 0 3px #edf4ff}
+.login-submit{width:100%;padding:12px;border:0;border-radius:9px;background:#175cd3;color:#fff;font-weight:750;cursor:pointer}
+.login-submit:hover{background:#154eb8}.login-error{display:none;color:#d92d20;background:#fff0ef;border-radius:8px;padding:9px;font-size:11px;margin-bottom:14px}
+.login-demo{margin-top:15px;text-align:center;font-size:10px;color:#667085}.login-footer{margin-top:24px;text-align:center;font-size:10px;color:#98a2b3}
+
+.login-screen{position:fixed;inset:0;background:#f5f7fb;display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
+.login-box{width:min(430px,100%);background:#fff;border:1px solid #e5e9f0;border-radius:18px;padding:32px;box-shadow:0 18px 55px rgba(16,24,40,.10)}
+.login-brand{display:flex;align-items:center;gap:11px;margin-bottom:24px}.login-logo{width:44px;height:44px;border-radius:12px;background:#eaf2ff;color:#175cd3;display:grid;place-items:center;font-weight:850;font-size:19px}
+.login-title{font-size:25px;font-weight:850}.login-sub{font-size:12px;color:#667085;margin:5px 0 20px}.role-options{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px}
+.role-card{border:1px solid #dfe4ec;background:#fff;border-radius:11px;padding:12px;text-align:left;cursor:pointer;display:flex;gap:9px;align-items:flex-start}.role-card.active{border-color:#175cd3;background:#edf4ff;box-shadow:0 0 0 2px #edf4ff}.role-card b{display:block;font-size:12px}.role-card small{display:block;color:#667085;font-size:9px;margin-top:3px}.role-icon{color:#175cd3;font-size:17px}
+.login-field{margin-bottom:14px}.login-field label{display:block;font-size:11px;font-weight:700;margin-bottom:6px;color:#344054}.login-field input{width:100%;padding:12px;border:1px solid #d8dee8;border-radius:9px;outline:0}.login-field input:focus{border-color:#175cd3;box-shadow:0 0 0 3px #edf4ff}
+.login-submit{width:100%;padding:12px;border:0;border-radius:9px;background:#175cd3;color:#fff;font-weight:750;cursor:pointer}.login-error{display:none;color:#d92d20;background:#fff0ef;border-radius:8px;padding:9px;font-size:11px;margin-bottom:13px}.login-demo{text-align:center;color:#667085;font-size:10px;margin-top:14px}.role-badge{font-size:9px;font-weight:800;padding:4px 8px;border-radius:999px;background:#edf4ff;color:#175cd3}
+.data-only{display:none}
+</style>
+</head>
+<body>
+<div class="login-screen" id="loginScreen">
+<div class="login-box">
+<div class="login-brand"><div class="login-logo">P</div><div><div class="login-title">PRISM-AI</div><div class="login-sub">Infrastructure Project Intelligence</div></div></div>
+<div style="font-size:19px;font-weight:800;margin-bottom:5px">Welcome back</div>
+<div class="login-sub">Choose your portal access and sign in.</div>
+<div class="role-options">
+<button type="button" class="role-card active" data-role="viewer"><span class="role-icon">◉</span><span><b>Viewer</b><small>View dashboard, projects and risks</small></span></button>
+<button type="button" class="role-card" data-role="inputer"><span class="role-icon">✎</span><span><b>Data Inputer</b><small>Add and update project data</small></span></button>
+</div>
+<div class="login-error" id="loginError">Invalid credentials for the selected portal.</div>
+<form id="loginForm"><input type="hidden" id="loginRole" value="viewer">
+<div class="login-field"><label>User ID</label><input id="loginEmail" value="VIEW001" autocomplete="username" required></div>
+<div class="login-field"><label>Password</label><input id="loginPassword" type="password" placeholder="Enter password" required></div>
+<button class="login-submit" type="submit">Sign In to Portal</button></form>
+<div class="login-demo" id="loginHint">Viewer User ID: <b>VIEW001</b> / Password: <b>viewer123</b></div>
+</div></div>
+
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-brand">
+      <div class="login-logo">P</div>
+      <div><div class="login-title">PRISM-AI</div><div class="login-sub">Infrastructure Project Intelligence</div></div>
+    </div>
+    <div class="login-sub">Sign in to access the project monitoring dashboard.</div>
+    <div class="login-error" id="loginError">Invalid email or password. Please try again.</div>
+    <form id="loginForm">
+      <div class="login-field"><label>Email</label><input id="loginEmail" type="email" placeholder="authority@prism-ai.gov.in" required></div>
+      <div class="login-field"><label>Password</label><input id="loginPassword" type="password" placeholder="Enter your password" required></div>
+      <button class="login-submit" type="submit">Sign In</button>
+    </form>
+    <div class="login-demo">Demo login: <b>admin@prism-ai.com</b> / <b>admin123</b></div>
+    <div class="login-footer">SIH 2026 · Smart Automation · Secure Monitoring Prototype</div>
+  </div>
+</div>
+
+<div class="app">
+<aside class="side"><div class="brand"><div class="logo">P</div><div><b>PRISM-AI</b><small>Infrastructure Intelligence</small></div></div>
+<nav class="nav">
+<button class="active" data-view="dashboard"><span>⌂</span>Dashboard</button>
+<button data-view="projects"><span>▦</span>Projects</button><button data-view="input" class="data-only"><span>＋</span>Data Input</button>
+<button data-view="predict"><span>◇</span>Risk Predictor</button>
+<button data-view="risks"><span>△</span>Risk Intelligence</button>
+<button data-view="alerts"><span>◉</span>Early Warnings</button>
+</nav><div class="sidefoot">SIH 2026 · Smart Automation<br>Predict · Explain · Prioritize · Act</div></aside>
+<div class="main"><header><div class="search">⌕ <input id="search" placeholder="Search projects..."></div><div class="user">Monitoring Authority <button class="btn" id="logoutBtn" style="padding:7px 10px">Logout</button><div class="avatar">MA</div></div></header>
+<section>
+<div id="dashboard" class="view active">
+<div class="head"><div><h1>Project Intelligence Dashboard</h1><p>Monitor progress and identify emerging infrastructure project risks.</p></div><div><button class="btn" id="reportBtn">↗ Export Report</button> <button class="btn primary data-only" id="addBtn">+ Add Project</button></div></div>
+<div class="grid stats">
+<div class="card stat"><div class="label">Total Projects</div><div class="value" id="total">4</div><div class="trend up">↑ Live portfolio</div></div>
+<div class="card stat"><div class="label">On Track</div><div class="value" id="ontrack">1</div><div class="trend up">Healthy projects</div></div>
+<div class="card stat"><div class="label">At Risk</div><div class="value" id="atrisk">3</div><div class="trend down">Requires review</div></div>
+<div class="card stat"><div class="label">Cost Exposure</div><div class="value" id="exposure">₹9.9 Cr</div><div class="trend down">Estimated overrun exposure</div></div>
+</div>
+<div class="grid two">
+<div class="card"><h3>Planned vs Actual Progress</h3><div class="sub">Portfolio completion across reporting periods</div><div class="chart" id="chart"></div><div class="months"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span></div><div class="legend"><i class="dot"></i>Actual <i class="dot p"></i>Planned</div></div>
+<div class="card"><h3>Priority Risk Queue</h3><div class="sub">Projects requiring attention</div><div class="risks" id="riskQueue"></div></div>
+</div>
+<div class="card" style="margin-top:17px"><h3>Project Portfolio</h3><div class="sub">Click View to inspect the AI risk explanation</div><div class="table"><table><thead><tr><th>Project</th><th>Sector</th><th>Progress</th><th>Risk</th><th>Expected Status</th><th></th></tr></thead><tbody id="rows"></tbody></table></div></div>
+</div>
+
+<div id="projects" class="view"><div class="head"><div><h1>Projects</h1><p>Add and monitor projects in the local prototype.</p></div><button class="btn primary data-only" id="newProject">+ New Project</button></div><div class="card"><h3>Project Portfolio</h3><div class="table"><table><thead><tr><th>Project</th><th>Sector</th><th>Progress</th><th>Budget</th><th>Risk</th></tr></thead><tbody id="allRows"></tbody></table></div></div></div>
+
+<div id="predict" class="view"><div class="head"><div><h1>AI Risk Predictor</h1><p>Enter current project indicators to generate a prototype risk score.</p></div></div><div class="card"><h3>Project Inputs</h3><div class="formgrid">
+<div class="field"><label>Project Name</label><input id="pname" value="New Infrastructure Project"></div>
+<div class="field"><label>Sector</label><select id="sector"><option>Roads</option><option>Transport</option><option>Bridges</option><option>Water</option><option>Buildings</option></select></div>
+<div class="field"><label>Planned Progress (%)</label><input id="planned" type="number" min="0" max="100" value="70"></div>
+<div class="field"><label>Actual Progress (%)</label><input id="actual" type="number" min="0" max="100" value="48"></div>
+<div class="field"><label>Budget (₹ Cr)</label><input id="budget" type="number" min="0" value="20"></div>
+<div class="field"><label>Expenditure (₹ Cr)</label><input id="spent" type="number" min="0" value="14"></div>
+<div class="field"><label>Schedule Delay (days)</label><input id="delay" type="number" min="0" value="35"></div>
+<div class="field"><label>Milestones Completed (%)</label><input id="milestone" type="number" min="0" max="100" value="55"></div>
+</div><div style="margin-top:18px"><button class="btn primary" id="predictBtn">Analyze Project Risk</button></div><div class="result" id="result"><div class="label">Risk Score</div><div class="score" id="score">—</div><div id="level" class="pill medium">Enter project data</div><div class="explain" id="explain"></div><div class="alert" id="recommend"><b>Recommendation</b><p>Run the analysis to generate an early warning and intervention suggestion.</p></div></div></div></div>
+
+<div id="risks" class="view"><div class="head"><div><h1>Risk Intelligence</h1><p>Explainable signals detected across the portfolio.</p></div></div><div class="grid stats"><div class="card stat"><div class="label">High Risk</div><div class="value" id="highCount">2</div><div class="trend down">Immediate review</div></div><div class="card stat"><div class="label">Delay Risk</div><div class="value">3</div><div class="trend down">Elevated probability</div></div><div class="card stat"><div class="label">Cost Risk</div><div class="value">2</div><div class="trend down">Exposure detected</div></div><div class="card stat"><div class="label">Model Status</div><div class="value">Ready</div><div class="trend up">Prototype inference engine</div></div></div><div class="grid two" style="margin-top:17px"><div class="card"><h3>Top Risk Factors</h3><div class="risks"><div class="risk"><b>Schedule variance</b><div class="meta"><span>Strong signal</span><b>High</b></div></div><div class="risk"><b>Physical progress gap</b><div class="meta"><span>Strong signal</span><b>High</b></div></div><div class="risk"><b>Expenditure acceleration</b><div class="meta"><span>Moderate signal</span><b>Medium</b></div></div><div class="risk"><b>Milestone completion gap</b><div class="meta"><span>Moderate signal</span><b>Medium</b></div></div></div></div><div class="card"><h3>Explainable AI</h3><div class="sub">The prototype shows why a project is flagged rather than only displaying a score.</div><div class="alert"><b>Prediction</b><p>Estimate likelihood of project delay/cost risk from current indicators.</p></div><div class="alert"><b>Explanation</b><p>Break the score into schedule, progress, expenditure and milestone signals.</p></div><div class="alert"><b>Action</b><p>Recommend which project should receive monitoring attention first.</p></div></div></div></div>
+
+<div id="alerts" class="view"><div class="head"><div><h1>Early Warnings</h1><p>Actionable alerts generated from project risk signals.</p></div><button class="btn" id="reviewBtn">Mark Reviewed</button></div><div class="card"><h3>Active Alerts</h3><div class="risks" id="alertsList"></div></div></div>
+
+
+<div id="input" class="view data-only">
+<div class="head"><div><h1>Data Input</h1><p>Add project information to the monitoring portfolio.</p></div><button class="btn" id="inputBack">← Dashboard</button></div>
+<div class="card"><h3>Project Information</h3>
+<div class="formgrid">
+<div class="field"><label>Project Name</label><input id="newName" placeholder="e.g. Highway Expansion"></div>
+<div class="field"><label>Sector</label><select id="newSector"><option>Roads</option><option>Transport</option><option>Bridges</option><option>Water</option><option>Buildings</option></select></div>
+<div class="field"><label>Progress (%)</label><input id="newProgress" type="number" min="0" max="100" value="50"></div>
+<div class="field"><label>Budget (₹ Cr)</label><input id="newBudget" type="number" min="0" value="20"></div>
+<div class="field"><label>Cost Exposure (₹ Cr)</label><input id="newExposure" type="number" min="0" value="1"></div>
+<div class="field"><label>Delay Probability (%)</label><input id="newDelay" type="number" min="0" max="100" value="30"></div>
+</div><div style="margin-top:18px"><button class="btn primary" id="saveProject">Save Project Data</button></div>
+<div class="alert"><b>Data Inputer access</b><p>Saved data immediately updates the dashboard, risk queue and early warnings.</p></div>
+</div></div>
+<div id="detail" class="view"><div class="head"><div><h1 id="dt">Project</h1><p>AI-generated project intelligence snapshot.</p></div><button class="btn" id="backBtn">← Back</button></div><div class="card"><h3>Project Health</h3><div class="grid" style="grid-template-columns:repeat(3,1fr);margin-top:18px"><div><div class="label">Physical Progress</div><div class="value" id="dp">—</div></div><div><div class="label">Delay Probability</div><div class="value" id="dd">—</div></div><div><div class="label">Cost Exposure</div><div class="value" id="dc">—</div></div></div><div class="alert"><b>Recommended intervention</b><p id="dr">—</p></div></div><div class="card" style="margin-top:17px"><h3>Risk Explanation</h3><div class="risks" id="detailFactors"></div></div></div>
+</section></div></div>
+<div class="toast" id="toast"></div>
+<script>
+let projects=[
+{name:"NH-47 Expansion",sector:"Roads",progress:48,budget:32,exposure:4.8,delay:82,risk:"High",status:"Potential delay"},
+{name:"Metro Phase III",sector:"Transport",progress:62,budget:45,exposure:3.2,delay:74,risk:"High",status:"Cost review"},
+{name:"River Bridge Package",sector:"Bridges",progress:76,budget:18,exposure:1.6,delay:51,risk:"Medium",status:"Watch"},
+{name:"Water Grid North",sector:"Water",progress:84,budget:26,exposure:.3,delay:18,risk:"Low",status:"On track"}];
+const views=[...document.querySelectorAll(".view")];
+function show(id){views.forEach(v=>v.classList.toggle("active",v.id===id));document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===id));scrollTo(0,0)}
+document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>show(b.dataset.view)));
+function toast(t){const x=document.getElementById("toast");x.textContent=t;x.style.display="block";setTimeout(()=>x.style.display="none",1800)}
+function render(){
+document.getElementById("total").textContent=projects.length;
+document.getElementById("ontrack").textContent=projects.filter(p=>p.risk==="Low").length;
+document.getElementById("atrisk").textContent=projects.filter(p=>p.risk!=="Low").length;
+document.getElementById("exposure").textContent="₹"+projects.reduce((a,p)=>a+p.exposure,0).toFixed(1)+" Cr";
+const rows=document.getElementById("rows"),all=document.getElementById("allRows"),q=document.getElementById("riskQueue"),al=document.getElementById("alertsList");
+rows.innerHTML="";all.innerHTML="";q.innerHTML="";al.innerHTML="";
+projects.forEach(p=>{
+let cls=p.risk==="High"?"high":p.risk==="Medium"?"medium":"low";
+rows.innerHTML+=`<tr data-name="${p.name.toLowerCase()}"><td><b>${p.name}</b></td><td>${p.sector}</td><td>${p.progress}% <span class="progress"><i style="width:${p.progress}%"></i></span></td><td><span class="pill ${cls}">${p.risk}</span></td><td>${p.status}</td><td><button class="btn viewProject" data-name="${p.name}">View</button></td></tr>`;
+all.innerHTML+=`<tr><td><b>${p.name}</b></td><td>${p.sector}</td><td>${p.progress}%</td><td>₹${p.budget} Cr</td><td><span class="pill ${cls}">${p.risk}</span></td></tr>`;
+if(p.risk!=="Low") q.innerHTML+=`<div class="risk"><div class="riskrow"><b>${p.name}</b><span class="pill ${cls}">${p.risk.toUpperCase()}</span></div><div class="meta"><span>Delay probability</span><b>${p.delay}%</b></div><div class="meta"><span>Cost exposure</span><span>₹${p.exposure} Cr</span></div></div>`;
+if(p.risk!=="Low") al.innerHTML+=`<div class="risk"><div class="riskrow"><b>${p.name}</b><span class="pill ${cls}">${p.risk==="High"?"Immediate":"Monitor"}</span></div><div class="meta"><span>${p.status}</span><span>Active</span></div></div>`;
+});
+document.querySelectorAll(".viewProject").forEach(b=>b.addEventListener("click",()=>openDetail(b.dataset.name)));
+document.getElementById("highCount").textContent=projects.filter(p=>p.risk==="High").length;
+}
+function openDetail(name){
+const p=projects.find(x=>x.name===name);if(!p)return;
+document.getElementById("dt").textContent=p.name;document.getElementById("dp").textContent=p.progress+"%";document.getElementById("dd").textContent=p.delay+"%";document.getElementById("dc").textContent="₹"+p.exposure+" Cr";
+document.getElementById("dr").textContent=p.risk==="High"?"Review contractor performance, validate milestones and investigate cost/schedule variance.":p.risk==="Medium"?"Monitor milestone recovery and expenditure trend closely.":"Continue routine monitoring; no immediate intervention required.";
+document.getElementById("detailFactors").innerHTML=`<div class="risk"><b>Schedule variance</b><div class="meta"><span>Contribution</span><b>${Math.min(95,Math.round(p.delay*.95))}%</b></div></div><div class="risk"><b>Progress gap</b><div class="meta"><span>Contribution</span><b>${Math.max(10,100-p.progress)}%</b></div></div><div class="risk"><b>Cost exposure</b><div class="meta"><span>Estimated exposure</span><b>₹${p.exposure} Cr</b></div></div>`;
+show("detail");
+}
+document.getElementById("backBtn").onclick=()=>show("dashboard");
+function predict(){
+const n=document.getElementById("pname").value.trim()||"New Project";
+const pl=Math.max(0,Math.min(100,Number(document.getElementById("planned").value)||0));
+const ac=Math.max(0,Math.min(100,Number(document.getElementById("actual").value)||0));
+const budget=Math.max(0,Number(document.getElementById("budget").value)||0);
+const spent=Math.max(0,Number(document.getElementById("spent").value)||0);
+const delay=Math.max(0,Number(document.getElementById("delay").value)||0);
+const mile=Math.max(0,Math.min(100,Number(document.getElementById("milestone").value)||0));
+let gap=Math.max(0,pl-ac), spendRatio=budget?spent/budget:0, mileGap=Math.max(0,pl-mile);
+let score=Math.round(Math.min(100,gap*0.65+delay*0.55+Math.max(0,(spendRatio-.55))*65+mileGap*.25));
+let level=score>=65?"High":score>=35?"Medium":"Low";let cls=level==="High"?"high":level==="Medium"?"medium":"low";
+document.getElementById("score").textContent=score+"/100";document.getElementById("level").textContent=level+" Risk";document.getElementById("level").className="pill "+cls";
+document.getElementById("explain").innerHTML=`<div><span>Progress gap</span><b>${gap.toFixed(0)} pts</b></div><div><span>Schedule delay</span><b>${delay.toFixed(0)} days</b></div><div><span>Budget spent</span><b>${(spendRatio*100).toFixed(0)}%</b></div><div><span>Milestone gap</span><b>${mileGap.toFixed(0)} pts</b></div>`;
+document.querySelector("#recommend p").textContent=level==="High"?"Immediate review recommended: investigate schedule slippage, expenditure and milestone performance.":level==="Medium"?"Increase monitoring frequency and validate the next milestone and expenditure trend.":"Continue routine monitoring; current indicators do not show a high-risk pattern.";
+}
+document.getElementById("predictBtn").onclick=predict;
+document.getElementById("newProject").onclick=()=>show("predict");
+document.getElementById("addBtn").onclick=()=>show("predict");
+document.getElementById("reportBtn").onclick=()=>toast("Prototype report prepared");
+document.getElementById("reviewBtn").onclick=()=>toast("Active alerts marked as reviewed");
+document.getElementById("search").oninput=e=>{let q=e.target.value.toLowerCase();document.querySelectorAll("#rows tr").forEach(r=>r.style.display=r.dataset.name.includes(q)?"":"none")};
+const chart=document.getElementById("chart"),a=[45,51,56,61,66,72,78],p=[48,55,62,68,73,79,84];
+a.forEach((v,i)=>{let w=document.createElement("div");w.className="bars";w.innerHTML=`<div class="bar" style="height:${p[i]*2.4}px"></div><div class="bar a" style="height:${v*2.4}px"></div>`;chart.appendChild(w)});
+render();
+
+const loginScreen=document.getElementById("loginScreen");
+const loginForm=document.getElementById("loginForm");
+const loginError=document.getElementById("loginError");
+const logoutBtn=document.getElementById("logoutBtn");
+
+function loggedIn(){return sessionStorage.getItem("prismLoggedIn")==="true"}
+function applyAuth(){loginScreen.style.display=loggedIn()?"none":"flex"}
+loginForm.addEventListener("submit",e=>{
+  e.preventDefault();
+  const email=document.getElementById("loginEmail").value.trim().toLowerCase();
+  const password=document.getElementById("loginPassword").value;
+  if(email==="admin@prism-ai.com" && password==="admin123"){
+    sessionStorage.setItem("prismLoggedIn","true");
+    loginError.style.display="none";
+    applyAuth();
+    toast("Welcome to PRISM-AI");
+  }else{
+    loginError.style.display="block";
+  }
+});
+logoutBtn.addEventListener("click",()=>{
+  sessionStorage.removeItem("prismLoggedIn");
+  applyAuth();
+  document.getElementById("loginPassword").value="";
+});
+applyAuth();
+
+const loginScreen=document.getElementById("loginScreen"),loginForm=document.getElementById("loginForm"),loginError=document.getElementById("loginError"),logoutBtn=document.getElementById("logoutBtn"),roleBadge=document.getElementById("roleBadge"),loginRole=document.getElementById("loginRole"),loginEmail=document.getElementById("loginEmail"),loginHint=document.getElementById("loginHint");
+const CREDS={viewer:{email:"VIEW001",pass:"viewer123",label:"Viewer"},inputer:{email:"DATA001",pass:"input123",label:"Data Inputer"}};
+function loggedIn(){return sessionStorage.getItem("prismLoggedIn")==="true"}function role(){return sessionStorage.getItem("prismRole")||"viewer"}
+function applyAuth(){const ok=loggedIn();loginScreen.style.display=ok?"none":"flex";if(ok){roleBadge.textContent=CREDS[role()].label;document.querySelectorAll(".data-only").forEach(e=>e.style.display=role()==="inputer"?"":"none")}}
+document.querySelectorAll(".role-card").forEach(b=>b.onclick=()=>{document.querySelectorAll(".role-card").forEach(x=>x.classList.remove("active"));b.classList.add("active");loginRole.value=b.dataset.role;loginEmail.value=CREDS[b.dataset.role].email;loginHint.innerHTML=b.dataset.role==="viewer"?'Viewer: <b>viewer@prism-ai.com</b> / <b>viewer123</b>':'Data Inputer: <b>inputer@prism-ai.com</b> / <b>input123</b>';loginError.style.display="none"});
+loginForm.onsubmit=e=>{e.preventDefault();let r=loginRole.value,c=CREDS[r];if(loginEmail.value.trim().toLowerCase()===c.email&&loginPassword.value===c.pass){sessionStorage.setItem("prismLoggedIn","true");sessionStorage.setItem("prismRole",r);loginError.style.display="none";applyAuth();show("dashboard");toast("Signed in as "+c.label)}else loginError.style.display="block"};
+logoutBtn.onclick=()=>{sessionStorage.clear();loginPassword.value="";applyAuth()};
+
+const originalShow=show;
+show=function(id){if(id==="input"&&role()!=="inputer"){toast("Viewer access is read-only");id="dashboard"}originalShow(id);if(loggedIn())applyAuth()};
+document.getElementById("inputBack").onclick=()=>show("dashboard");
+document.getElementById("addBtn").onclick=()=>show("input");
+document.getElementById("newProject").onclick=()=>show("input");
+document.getElementById("saveProject").onclick=()=>{
+if(role()!=="inputer"){toast("Only Data Inputer can add data");return}
+const name=document.getElementById("newName").value.trim();if(!name){toast("Enter a project name");return}
+const progress=Math.max(0,Math.min(100,Number(document.getElementById("newProgress").value)||0)),budget=Math.max(0,Number(document.getElementById("newBudget").value)||0),exposure=Math.max(0,Number(document.getElementById("newExposure").value)||0),delay=Math.max(0,Math.min(100,Number(document.getElementById("newDelay").value)||0)),risk=delay>=65?"High":delay>=35?"Medium":"Low";
+projects.push({name,sector:document.getElementById("newSector").value,progress,budget,exposure,delay,risk,status:risk==="High"?"Potential delay":risk==="Medium"?"Watch":"On track"});render();document.getElementById("newName").value="";show("dashboard");toast("Project data saved successfully")
+};
+applyAuth();
+</script>
+</body></html>
